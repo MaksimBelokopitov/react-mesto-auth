@@ -1,0 +1,18 @@
+.mesto__delete-button {
+    background-image: url(../../../images/Trash.png);
+    width: 18px;
+    height: 19px;
+    background-size: cover;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    background-position: center;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+    
+.mesto__delete-button:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}

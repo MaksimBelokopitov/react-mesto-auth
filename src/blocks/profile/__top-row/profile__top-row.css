@@ -1,0 +1,12 @@
+.profile__top-row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+@media screen and (max-width: 650px) {
+    .profile__top-row {
+        gap: 10px;
+    }
+}
+

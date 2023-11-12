@@ -1,0 +1,6 @@
+@media screen and (max-width: 650px) {
+    .popup__button-close_figure {
+        right: -28px;
+    }    
+}
+

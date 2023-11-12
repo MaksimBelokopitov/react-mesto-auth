@@ -1,0 +1,11 @@
+.popup__figure-image {
+    max-width: 65vw;
+    max-height: 65vh;
+    aspect-ratio: 16/10;
+}
+
+@media screen and (max-width: 650px) {
+    .popup__figure-image {
+        aspect-ratio: 8/10;
+    }
+}
