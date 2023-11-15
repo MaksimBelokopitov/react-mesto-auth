@@ -2,10 +2,14 @@
     padding-bottom: 41px;
     box-sizing: border-box;
     border-bottom: 1px solid rgba(84, 84, 84, .7);
+    display: flex;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 650px){
     .header {
         padding-bottom: 31px;
+        flex-wrap: wrap;
+        
     }
 }

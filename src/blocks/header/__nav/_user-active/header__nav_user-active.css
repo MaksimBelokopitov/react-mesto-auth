@@ -1,0 +1,5 @@
+@media screen and (max-width: 650px) {
+    .header__nav_user-active{
+        display: flex;
+    }
+}

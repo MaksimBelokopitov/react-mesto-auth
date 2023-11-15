@@ -1,0 +1,13 @@
+.popup__subtitle {
+    color: black;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    margin: 0;
+}
+
+@media screen and (max-width: 650px) {
+    .popup__subtitle {
+        font-size: 20px;
+    }
+}

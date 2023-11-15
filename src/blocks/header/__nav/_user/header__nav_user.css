@@ -1,0 +1,14 @@
+
+    @media screen and (max-width: 650px) {
+        .header__nav_user{
+            display: none;
+            order: -1;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(84, 84, 84, .7);
+            margin-top: 27px;
+        }
+}

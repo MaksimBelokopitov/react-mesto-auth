@@ -35,9 +35,14 @@
 
 @media screen and (max-width: 755px) {
     .page {
-        padding-left: 19px;
-        padding-right: 19px;
+        padding-left: 30px;
+        padding-right: 30px;
         padding-top: 28px;
+    }
+}
+@media screen and (max-width: 650px) {
+    .page {
+        padding-top: 0;
     }
 }
 

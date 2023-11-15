@@ -9,22 +9,24 @@ import ImagePopup from "./components/ImagePopup";
 import api from "./utils/Api";
 import { CurrentUserContext } from "./context/CurrentUserContext";
 import { AppContext } from "./context/AppContext";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Login from "./components/Login";
+import Register from "./components/Rigister";
+import ProtectedRouteElement from "./components/ProtectedRouteElement";
+import * as auth from './auth';
 
 function App() {
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState({});
-  const [isImagePopup, setIsImagePopup] = useState(false);
+  const navigate = useNavigate();
+
+  const [isLogin, setIsLogin] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(false);
-  
-
+ 
   useEffect(() =>{
+    handleTokenCheck();
     api.getPageData()
     .then(([userData, cardsData]) => {
         setCurrentUser(userData);
@@ -35,9 +37,30 @@ function App() {
     });
   },[]);
 
+  const handleTokenCheck = () => {
+    if (localStorage.getItem('jwt')){
+      const jwt = localStorage.getItem('jwt');
+      auth.checkToken(jwt)
+      .then((res) => {
+        if (res){
+          setUserEmail(res.data.email);
+          setIsLogin(true);
+          navigate("/", {replace: true})
+        };
+      });  
+    };
+  };
+  
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isImagePopup, setIsImagePopup] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+
   function closeAllPopups(){
-    setIsEditAvatarPopupOpen(false)
-    setIsEditProfilePopupOpen(false)
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsImagePopup(false);
     setSelectedCard({});
@@ -57,9 +80,8 @@ function App() {
         document.removeEventListener('keydown', closeByEscape);
       }
     }
-  }, [isOpen]) 
-
-
+  }, [isOpen])
+ 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
   };
@@ -133,24 +155,40 @@ function App() {
   }
     
   return (
-    <AppContext.Provider value={{isLoading, closeAllPopups}}>
+    <AppContext.Provider value={
+      {isLoading, 
+      closeAllPopups, 
+      isLogin, 
+      setIsLogin, 
+      userEmail, 
+      setUserEmail}}>
       <CurrentUserContext.Provider value={currentUser}>
         <div className="App">
           <Header />
-          <Main 
-            onEditProfile={handleEditProfileClick} 
-            onAddPlace={handleAddPlaceClick} 
-            onEditAvatar={handleEditAvatarClick} 
-            onCardClick={handleCardClick} 
-            cards = {cards}
-            onCardLike = {handleCardLike}
-            onCardDelete = {handleCardDelete}
+          <Routes>
+          <Route 
+            path="/"
+            element={
+              <ProtectedRouteElement
+                element={Main}
+                onEditProfile={handleEditProfileClick} 
+                onAddPlace={handleAddPlaceClick} 
+                onEditAvatar={handleEditAvatarClick} 
+                onCardClick={handleCardClick} 
+                cards = {cards}
+                onCardLike = {handleCardLike}
+                onCardDelete = {handleCardDelete}
+              />
+            } 
           />
-          <Footer />
-          <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser}/>
-          <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlace} />
-          <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} />
-          <ImagePopup   card={selectedCard} isOpen={isImagePopup} />
+          <Route path="sign-in" element={<Login />} />
+          <Route path="/sign-up" element={<Register />}/>
+          </Routes>
+          {isLogin&&<Footer />}
+          {isLogin&&<EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser}/>}
+          {isLogin&&<AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlace} />}
+          {isLogin&&<EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} />}
+          {isLogin&&<ImagePopup   card={selectedCard} isOpen={isImagePopup} />}
         </div>  
       </CurrentUserContext.Provider>
     </AppContext.Provider>
