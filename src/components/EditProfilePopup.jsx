@@ -2,15 +2,13 @@ import { useContext, useEffect } from "react";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 import { AppContext } from "../context/AppContext";
-import { useForm } from "../hooks/useForm";
+import { useFormAndValidation } from "../hooks/useFormAndValidation";
 
 function EditProfilePopup({isOpen, onUpdateUser}){
 
-  const {values, handleChange, setValues} = useForm({
-    name:'',
-    about: '',
-  });
-
+  
+  const {values, handleChange, errors, isValid, setValues, resetForm} = useFormAndValidation();
+  
   const currentUser = useContext(CurrentUserContext);
   const appContext = useContext(AppContext);
  
@@ -27,6 +25,8 @@ function EditProfilePopup({isOpen, onUpdateUser}){
     name: values.name,
     about: values.about
    });
+
+   resetForm();
   } 
 
   return(
@@ -35,10 +35,12 @@ function EditProfilePopup({isOpen, onUpdateUser}){
       title = {'Редактирование профиля'} 
       buttonText ={appContext.isLoading ? 'Сохранение...' : 'Сохранить'} 
       isOpen ={isOpen} 
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      isValid = {isValid}
+    >
       <label className="popup__form-field">
         <input
-          className="popup__input popup__input_type_user-name"
+          className={`popup__input ${!isValid && "popup__input_type_error"}`}
           type="text"
           value={values.name ?? ''}
           onChange={handleChange}
@@ -49,11 +51,11 @@ function EditProfilePopup({isOpen, onUpdateUser}){
           maxLength="40"
           id="input-profile-name"
         />
-        <span className="popup__error input-profile-name-error" ></span>
+        <span className={`popup__error popup__error ${!isValid && "popup__error_visible"}`} >{errors.name}</span>
       </label>
       <label className="popup__form-field">
         <input
-          className="popup__input popup__input_type_user-job"
+          className={`popup__input ${!isValid && "popup__input_type_error"}`}
           type="text"
           name="about"
           placeholder="Напишите информацию о себе"
@@ -64,7 +66,7 @@ function EditProfilePopup({isOpen, onUpdateUser}){
           value={values.about ?? ''}
           onChange={handleChange}
         />
-        <span className="popup__error input-profile-job-error" ></span>
+        <span className={`popup__error ${!isValid && "popup__error_visible"}`} >{errors.about}</span>
       </label>
     </PopupWithForm>
     );

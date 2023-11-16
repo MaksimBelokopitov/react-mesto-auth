@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as auth from '../auth.js';
-import InfoTooltip from './InfoTooltip.jsx';
+import InfoTooltip from './InfoTooltip.jsx'; 
+import AuthForm from './AuthForm.jsx';
+
 
 const Register = () => {
 
@@ -47,44 +49,24 @@ const Register = () => {
       handleInfoOpen();
       handleRegOk();
     })
-    .catch(() => {
+    .catch((err) => {
+      console.log(`Ошибка.....: ${err}`);
       handleInfoOpen();
     });
   };
      
 return(
-    <div className="login">
+    <main className="login">
       <InfoTooltip isOpen={isInfoPopupOpen} isClose={handleInfoClose} isRegOk={isRegOk}/>
       <h2 className="login__title">
         Регистрация
       </h2>
-      <form onSubmit={handleSubmit} className="login__form">
-        <input 
-          className="login__input"
-          required
-          id="email"
-          name="email"
-          type="text"
-          placeholder='Email'
-          value={formValue.email}
-          onChange={handleChange}
-         />
-        <input 
-          className="login__input"
-          required 
-          id="password"   
-          name="password" 
-          type="password"
-          placeholder='Пароль'
-          value={formValue.password}
-          onChange={handleChange}  
-        />
-        <button type="submit" className="login__button">Зарегистрироваться</button>
-      </form>
-      <div className="login__signin">
-        <p className='login__subtitle'>Уже зарегистрированы? <Link to="/sign-in" className="login__link">Войти</Link></p>
-      </div>
-    </div>
+      <AuthForm 
+        formValue={formValue} 
+        handleChange={handleChange} 
+        handleSubmit={handleSubmit}
+        buttonText = {'Зарегистироваться'} />
+    </main>
   )
 }
   

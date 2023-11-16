@@ -47,7 +47,10 @@ function App() {
           setIsLogin(true);
           navigate("/", {replace: true})
         };
-      });  
+      })
+      .catch((err) => {
+        console.log(`Ошибка.....: ${err}`);
+      });
     };
   };
   

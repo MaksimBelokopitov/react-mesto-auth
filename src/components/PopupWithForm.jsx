@@ -1,11 +1,10 @@
 import { AppContext } from "../context/AppContext";
 import { useContext } from "react";
 
-function PopupWithForm({name, title, children, buttonText, isOpen, onSubmit}){
+function PopupWithForm({name, title, children, buttonText, isOpen, onSubmit, isValid}){
     
     const appContext = useContext(AppContext)
     const popupClose = appContext.closeAllPopups;
-
    
     return(
         <div onClick={e => (e.currentTarget === e.target) && popupClose()} className= {`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
@@ -19,7 +18,7 @@ function PopupWithForm({name, title, children, buttonText, isOpen, onSubmit}){
                     onSubmit={onSubmit}
                 >
                         {children}
-                        <button className="popup__button" type="submit">{buttonText}</button>
+                        <button className={`popup__button ${!isValid && 'popup__button_disabled'}`} type="submit">{buttonText}</button>
                 </form>
             </div>
         </div>

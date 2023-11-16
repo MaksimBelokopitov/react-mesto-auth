@@ -2,6 +2,7 @@ import React, {useState, useContext} from 'react';
 import {  useNavigate} from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 import * as auth from '../auth';
+import AuthForm from './AuthForm';
 
 const Login = () => {
 
@@ -38,35 +39,16 @@ const Login = () => {
   };
  
     return(
-      <div className="login">
+      <main className="login">
         <h2 className="login__title">
           Вход
         </h2>
-        <form onSubmit={handleSubmit} className="login__form">
-         
-          <input 
-            className="login__input"
-            required 
-            id="email" 
-            name="email" 
-            type="text" 
-            placeholder='Email'
-            value={formValue.email}
-            onChange={handleChange}
-           />
-          <input 
-            className="login__input"
-            required 
-            id="password"   
-            name="password" 
-            type="password"
-            placeholder='Пароль'  
-            value={formValue.password}
-            onChange={handleChange}
-          />
-          <button type="submit" className="login__button">Войти</button>
-        </form>
-      </div>
+        <AuthForm 
+          formValue={formValue} 
+          handleChange={handleChange} 
+          handleSubmit={handleSubmit}
+          buttonText = {'Войти'} />
+      </main>
     )
   };
 
