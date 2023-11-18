@@ -13,6 +13,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Rigister";
 import ProtectedRouteElement from "./components/ProtectedRouteElement";
+import InfoTooltip from "./components/InfoTooltip";
 import * as auth from './auth';
 
 function App() {
@@ -58,6 +59,10 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
+  const [isRegOk, setIsRegOk] = useState(false);
+
   const [isImagePopup, setIsImagePopup] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
 
@@ -70,6 +75,20 @@ function App() {
   };
 
   const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImagePopup;
+
+  function handleInfoOpen() {
+    setIsInfoPopupOpen(true);
+  };
+
+  function handleInfoClose() {
+    setIsInfoPopupOpen(false);
+    {isRegOk && navigate('/sign-in', {replace: true})};
+    setIsRegOk(false);
+  };
+
+  function handleRegOk() {
+    setIsRegOk(true);
+  };
 
   useEffect(() => {
     function closeByEscape(evt) {
@@ -185,13 +204,14 @@ function App() {
             } 
           />
           <Route path="sign-in" element={<Login />} />
-          <Route path="/sign-up" element={<Register />}/>
+          <Route path="/sign-up" element={<Register handleInfoOpen={handleInfoOpen} handleRegOk={handleRegOk} />}/>
           </Routes>
           {isLogin&&<Footer />}
           {isLogin&&<EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser}/>}
           {isLogin&&<AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlace} />}
           {isLogin&&<EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} />}
           {isLogin&&<ImagePopup   card={selectedCard} isOpen={isImagePopup} />}
+          {!isLogin&&<InfoTooltip isOpen={isInfoPopupOpen} isClose={handleInfoClose} isRegOk={isRegOk}/>}
         </div>  
       </CurrentUserContext.Provider>
     </AppContext.Provider>

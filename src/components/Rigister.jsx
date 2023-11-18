@@ -1,35 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import * as auth from '../auth.js';
-import InfoTooltip from './InfoTooltip.jsx'; 
 import AuthForm from './AuthForm.jsx';
 
-
-const Register = () => {
-
-  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
-  const [isRegOk, setIsRegOk] = useState(false);
-
-  function handleInfoOpen() {
-    setIsInfoPopupOpen(true);
-  };
-
-  function handleInfoClose() {
-    setIsInfoPopupOpen(false);
-    {isRegOk && navigate('/sign-in', {replace: true})};
-    setIsRegOk(false);
-  };
-
-  function handleRegOk() {
-    setIsRegOk(true);
-  };
+const Register = ({handleInfoOpen, handleRegOk}) => {
 
   const [formValue, setFormValue] = useState({
     email:'',
     password:'',
   });
-
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const {name, value} = e.target;
@@ -57,7 +35,6 @@ const Register = () => {
      
 return(
     <main className="login">
-      <InfoTooltip isOpen={isInfoPopupOpen} isClose={handleInfoClose} isRegOk={isRegOk}/>
       <h2 className="login__title">
         Регистрация
       </h2>
